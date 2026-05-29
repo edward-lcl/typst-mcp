@@ -40,3 +40,21 @@ describe("doc_get_structure", () => {
     expect(methods!.id).toBe("methods");
   });
 });
+
+// LaTeX structure tests
+describe("doc_get_structure (LaTeX)", () => {
+  it("parses sections from a .tex file", async () => {
+    const result = await getDocumentStructure({ doc_path: path.resolve("fixtures/sample.tex") });
+    const titles = result.sections.map((s) => s.title);
+    expect(titles).toContain("Introduction");
+    expect(titles).toContain("Methods");
+    expect(titles).toContain("Results");
+  });
+
+  it("parses nested subsections from LaTeX", async () => {
+    const result = await getDocumentStructure({ doc_path: path.resolve("fixtures/sample.tex") });
+    const intro = result.sections.find((s) => s.title === "Introduction");
+    expect(intro).toBeDefined();
+    expect(intro!.subsections.length).toBeGreaterThan(0);
+  });
+});

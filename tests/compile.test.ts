@@ -36,3 +36,14 @@ describe("doc_compile", () => {
     ).rejects.toThrow(/unsupported/i);
   });
 });
+
+// LaTeX / Tectonic tests
+// First run downloads TeX packages (~45s); subsequent runs are fast
+describe("doc_compile (LaTeX)", () => {
+  it("compiles a valid .tex file via tectonic", { timeout: 90_000 }, async () => {
+    const result = await compileDocument({ doc_path: path.resolve("fixtures/sample.tex") });
+    expect(result.success).toBe(true);
+    expect(result.pdf_path).toBeTruthy();
+    expect(fs.existsSync(result.pdf_path)).toBe(true);
+  });
+});

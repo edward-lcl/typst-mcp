@@ -1,5 +1,9 @@
 # typst-mcp
 
+[![CI](https://github.com/edward-lcl/typst-mcp/actions/workflows/ci.yml/badge.svg)](https://github.com/edward-lcl/typst-mcp/actions/workflows/ci.yml)
+[![npm](https://img.shields.io/npm/v/typst-mcp)](https://www.npmjs.com/package/typst-mcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+
 An MCP (Model Context Protocol) server that gives AI agents clean, semantic operations over Typst and LaTeX research documents. Rather than treating documents as raw text, `typst-mcp` exposes compile, navigate, edit, review, and register operations as structured tool calls.
 
 ## Why

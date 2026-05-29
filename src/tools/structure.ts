@@ -92,9 +92,10 @@ function buildTree(
 export async function getDocumentStructure(input: {
   doc_path: string;
 }): Promise<StructureResult> {
+  const ext = input.doc_path.toLowerCase().endsWith(".tex") ? "tex" : "typ";
   const source = fs.readFileSync(input.doc_path, "utf-8");
   const lines = source.split("\n");
-  const headings = parseHeadings(lines);
+  const headings = ext === "tex" ? parseLatexHeadings(lines) : parseHeadings(lines);
 
   if (headings.length === 0) {
     return { title: "", sections: [] };
@@ -104,8 +105,27 @@ export async function getDocumentStructure(input: {
   const index = { value: 0 };
   const sections = buildTree(headings, lines, topLevel, index);
 
-  return {
-    title: sections[0]?.title ?? "",
-    sections,
+  return { title: sections[0]?.title ?? "", sections };
+}
+
+function parseLatexHeadings(lines: string[]): RawHeading[] {
+  const LATEX_LEVELS: Record<string, number> = {
+    "\\section": 1,
+    "\\subsection": 2,
+    "\\subsubsection": 3,
+    "\\paragraph": 4,
+    "\\subparagraph": 5,
   };
+  const headings: RawHeading[] = [];
+  for (let i = 0; i < lines.length; i++) {
+    for (const [cmd, level] of Object.entries(LATEX_LEVELS)) {
+      const re = new RegExp(`\\${cmd}\\*?\\{([^}]+)\\}`);
+      const match = lines[i].match(re);
+      if (match) {
+        headings.push({ level, title: match[1].trim(), line: i + 1 });
+        break;
+      }
+    }
+  }
+  return headings;
 }

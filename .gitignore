@@ -1,0 +1,9 @@
+node_modules/
+dist/
+*.bak.*
+fixtures/__doc-mcp-sync-*.typ
+fixtures/sync-probe*.typ
+fixtures/broken.typ
+fixtures/bib-scratch.typ
+fixtures/fig-scratch.typ
+fixtures/scratch.typ
